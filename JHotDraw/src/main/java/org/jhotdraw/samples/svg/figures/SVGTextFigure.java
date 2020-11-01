@@ -141,42 +141,37 @@ public class SVGTextFigure
         return getTextShape().getBounds2D().contains(p);
     }
     
+    private boolean isEmptyText(String text){
+        return (text == null || text.length() == 0);
+    }
+    
+    private TextLayout createTextLayoutFromText(String text){
+        FontRenderContext frc = getFontRenderContext();
+        HashMap<TextAttribute,Object> textAttributes = new HashMap<TextAttribute,Object>();
+        textAttributes.put(TextAttribute.FONT, getFont());
+        if (FONT_UNDERLINE.get(this)) {
+            textAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        }
+        return new TextLayout(text, textAttributes, frc);
+    }
+    
     private Shape getTextShape() {
         if (cachedTextShape == null) {
             String text = getText();
-            if (text == null || text.length() == 0) {
+            if (isEmptyText(text)){
                 text = " ";
             }
+            TextLayout textLayout = createTextLayoutFromText(text);
             
-            FontRenderContext frc = getFontRenderContext();
-            HashMap<TextAttribute,Object> textAttributes = new HashMap<TextAttribute,Object>();
-            textAttributes.put(TextAttribute.FONT, getFont());
-            if (FONT_UNDERLINE.get(this)) {
-                textAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-            }
-            TextLayout textLayout = new TextLayout(text, textAttributes, frc);
+            AffineTransform twoDTransform = new AffineTransform();
+            twoDTransform.translate(coordinates[0].x, coordinates[0].y);
             
-            AffineTransform tx = new AffineTransform();
-            tx.translate(coordinates[0].x, coordinates[0].y);
-            switch (TEXT_ANCHOR.get(this)) {
-                case END :
-                    tx.translate(-textLayout.getAdvance(), 0);
-                    break;
-                case MIDDLE :
-                    tx.translate(-textLayout.getAdvance() / 2d, 0);
-                    break;
-                case START :
-                    break;
-            }
-            tx.rotate(rotates[0]);
+            TEXT_ANCHOR.get(this).anchor(twoDTransform, textLayout);
             
-            /*
-            if (TRANSFORM.get(this) != null) {
-                tx.preConcatenate(TRANSFORM.get(this));
-            }*/
+            twoDTransform.rotate(rotates[0]);
             
-            cachedTextShape = tx.createTransformedShape(textLayout.getOutline(tx));
-            cachedTextShape = textLayout.getOutline(tx);
+            cachedTextShape = twoDTransform.createTransformedShape(textLayout.getOutline(twoDTransform));
+            cachedTextShape = textLayout.getOutline(twoDTransform);
         }
         return cachedTextShape;
     }
