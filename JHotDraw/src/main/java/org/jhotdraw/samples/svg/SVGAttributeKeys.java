@@ -15,6 +15,8 @@
 package org.jhotdraw.samples.svg;
 
 import java.awt.*;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -31,7 +33,24 @@ public class SVGAttributeKeys extends AttributeKeys {
      private final static ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
    
     public enum TextAnchor {
-        START, MIDDLE, END
+        START{
+            @Override
+            public void anchor(AffineTransform affine, TextLayout textLayout){
+            };
+        },
+        MIDDLE{
+            @Override
+            public void anchor(AffineTransform affine, TextLayout textLayout){
+                affine.translate(-textLayout.getAdvance() / 2d, 0);
+            }
+        }, 
+        END{
+            @Override
+            public void anchor(AffineTransform affine, TextLayout textLayout){
+                affine.translate(-textLayout.getAdvance(), 0);
+            }
+        };
+        public abstract void anchor(AffineTransform affine, TextLayout textLayout);
     }
     
     /**
