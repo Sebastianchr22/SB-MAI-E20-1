@@ -8,7 +8,6 @@ package org.jhotdraw.samples.svg.figures;
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.annotation.Quoted;
-import java.awt.Shape;
 import org.junit.Test;
 
 /**

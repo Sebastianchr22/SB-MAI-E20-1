@@ -6,10 +6,7 @@
 package org.jhotdraw.samples.svg.figures;
 
 import com.tngtech.jgiven.Stage;
-import com.tngtech.jgiven.annotation.As;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
-import com.tngtech.jgiven.annotation.FillerWord;
-import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.samples.svg.SVGAttributeKeys;
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.TEXT_ANCHOR;
 import org.junit.Assert;
