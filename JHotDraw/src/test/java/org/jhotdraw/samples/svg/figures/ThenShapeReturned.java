@@ -6,6 +6,8 @@
 package org.jhotdraw.samples.svg.figures;
 
 import com.tngtech.jgiven.Stage;
+import com.tngtech.jgiven.annotation.ExpectedScenarioState;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
@@ -14,13 +16,13 @@ import org.junit.Test;
  */
 class ThenShapeReturned extends Stage<ThenShapeReturned> {
 
-    @Override
-    public ThenShapeReturned given(){
-        return this;
-    }
-    
-    @Test
-    public void text_shape_is_returned() {
+    @ExpectedScenarioState
+    SVGTextFigure shape;
 
+    @Test
+    public ThenShapeReturned text_shape_is_editable() {
+        assertNotNull(shape);
+        assertTrue(shape.isEditable());
+        return this;
     }
 }
